@@ -29,15 +29,16 @@
 
   // Geometry
   var geometry = new THREE.IcosahedronGeometry(1.5, 1);
-  var material = new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true });
+  var hue = 0;
+  var material = new THREE.MeshBasicMaterial({ color: new THREE.Color(`hsl(${hue}, 100%, 50%)`), wireframe: true });
   var wireframe = new THREE.Mesh(geometry, material);
   scene.add(wireframe);
 
   // Animation loop
   function animate() {
     requestAnimationFrame(animate);
-    wireframe.rotation.x += 0.01;
-    wireframe.rotation.y += 0.01;
+    wireframe.rotation.x += 0.001;
+    wireframe.rotation.y += 0.001;
     renderer.render(scene, camera);
   }
 
