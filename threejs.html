@@ -34,68 +34,33 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0xffffff, 1); // White background
 
-    // Geometry and Material
+    // Geometry
     var geometry = new THREE.IcosahedronGeometry(1.5, 1);
-    var hue = 0;
-    var material = new THREE.MeshBasicMaterial({
-      color: new THREE.Color(`hsl(${hue}, 100%, 50%)`),
+
+    // Create visible rainbow wireframe material
+    var wireMaterial = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(`hsl(0, 100%, 50%)`),
       wireframe: true
     });
-    var wireframe = new THREE.Mesh(geometry, material);
-    scene.add(wireframe);
+
+    // Create invisible solid material for raycasting
+    var hitboxMaterial = new THREE.MeshBasicMaterial({
+      transparent: true,
+      opacity: 0 // fully invisible
+    });
+
+    // Combine both using THREE.Group
+    var wireframe = new THREE.Mesh(geometry, wireMaterial);
+    var hitbox = new THREE.Mesh(geometry, hitboxMaterial);
+
+    var group = new THREE.Group();
+    group.add(hitbox); // for raycasting
+    group.add(wireframe); // for visible mesh
+    scene.add(group);
 
     // Raycaster and mouse tracking
     var raycaster = new THREE.Raycaster();
     var mouse = new THREE.Vector2();
     var isHovered = false;
 
-    window.addEventListener('mousemove', function (event) {
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    }, false);
-
-    // Animation loop
-    function animate() {
-      requestAnimationFrame(animate);
-
-      // Check for mouse over
-      raycaster.setFromCamera(mouse, camera);
-      var intersects = raycaster.intersectObject(wireframe);
-
-      let rotationSpeed, hueSpeed;
-
-      if (intersects.length > 0) {
-        if (!isHovered) {
-          wireframe.scale.set(1.2, 1.2, 1.2);
-          isHovered = true;
-        }
-        rotationSpeed = 0.01;
-        hueSpeed = 5;
-      } else {
-        if (isHovered) {
-          wireframe.scale.set(1, 1, 1);
-          isHovered = false;
-        }
-        rotationSpeed = 0.001;
-        hueSpeed = 1;
-      }
-
-      // Animate rotation and colour
-      wireframe.rotation.x += rotationSpeed;
-      wireframe.rotation.y += rotationSpeed;
-      hue = (hue + hueSpeed) % 360;
-      material.color.setHSL(hue / 360, 1, 0.5);
-
-      renderer.render(scene, camera);
-    }
-
-    animate();
-
-    // Handle window resizing
-    window.addEventListener('resize', function () {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-  </script>
-</
+    window.addEventListener('mousemove
