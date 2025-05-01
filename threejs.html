@@ -61,6 +61,44 @@
     // Raycaster and mouse tracking
     var raycaster = new THREE.Raycaster();
     var mouse = new THREE.Vector2();
-    var isHovered = false;
 
-    window.addEventListener('mousemove
+    window.addEventListener('mousemove', function (event) {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    }, false);
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Check for mouse over
+      raycaster.setFromCamera(mouse, camera);
+      var intersects = raycaster.intersectObject(hitbox);
+
+      let rotationSpeed;
+
+      if (intersects.length > 0) {
+        rotationSpeed = 0.01; // Rotate faster when hovered
+      } else {
+        rotationSpeed = 0.001; // Normal rotation speed
+      }
+
+      // Rotate
+      group.rotation.x += rotationSpeed;
+      group.rotation.y += rotationSpeed;
+
+      // Render scene
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Handle window resizing
+    window.addEventListener('resize', function () {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
