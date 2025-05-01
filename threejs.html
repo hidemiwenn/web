@@ -26,28 +26,37 @@
 
   var renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("canvas"), antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setClearColor(0xffffff, 1); // white background
+  renderer.setClearColor(0xffffff, 1); // White background
 
-  // Geometry
+  // Geometry & Material
   var geometry = new THREE.IcosahedronGeometry(1.5, 1);
   var hue = 0;
-  var material = new THREE.MeshBasicMaterial({ color: new THREE.Color(`hsl(${hue}, 100%, 50%)`), wireframe: true });
+  var material = new THREE.MeshBasicMaterial({
+    color: new THREE.Color(`hsl(${hue}, 100%, 50%)`),
+    wireframe: true
+  });
   var wireframe = new THREE.Mesh(geometry, material);
   scene.add(wireframe);
 
   // Animation loop
   function animate() {
     requestAnimationFrame(animate);
-    wireframe.rotation.x += 0.001;
-    wireframe.rotation.y += 0.001;
-    renderer.render(scene, camera);
+
+    // Update colour
     hue = (hue + 1) % 360;
     material.color.setHSL(hue / 360, 1, 0.5);
+
+    // Rotate object
+    wireframe.rotation.x += 0.001;
+    wireframe.rotation.y += 0.001;
+
+    // Render scene
+    renderer.render(scene, camera);
   }
 
   animate();
 
-  // Resize
+  // Handle window resize
   window.addEventListener('resize', function () {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
