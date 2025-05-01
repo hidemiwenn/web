@@ -41,6 +41,8 @@
     wireframe.rotation.x += 0.001;
     wireframe.rotation.y += 0.001;
     renderer.render(scene, camera);
+    hue = (hue + 1) % 360;
+    material.color.setHSL(hue / 360, 1, 0.5);
   }
 
   animate();
