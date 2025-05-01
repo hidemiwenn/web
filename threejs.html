@@ -26,6 +26,7 @@
 
   var renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("canvas"), antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0xffffff, 1); // white background
 
   // Geometry
   var geometry = new THREE.IcosahedronGeometry(1.5, 1);
