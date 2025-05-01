@@ -67,6 +67,9 @@
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     }, false);
 
+    // Variables for rainbow colour
+    var hue = 0;
+
     // Animation loop
     function animate() {
       requestAnimationFrame(animate);
@@ -83,9 +86,13 @@
         rotationSpeed = 0.001; // Normal rotation speed
       }
 
-      // Rotate
+      // Rotate the group
       group.rotation.x += rotationSpeed;
       group.rotation.y += rotationSpeed;
+
+      // Continuously change the hue for rainbow effect
+      hue = (hue + 1) % 360; // Hue cycles from 0 to 360
+      wireMaterial.color.setHSL(hue / 360, 1, 0.5); // Apply the rainbow colour
 
       // Render scene
       renderer.render(scene, camera);
